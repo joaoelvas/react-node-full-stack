@@ -20,9 +20,27 @@ class TransitionComp extends Component{
             <div>
                 <Transition 
                     in={this.state.show}
-                    timeout={2000}
+                    timeout={{
+                        enter: 2000,
+                        exit: 500
+                    }}
+
+                    enter={true}
+                    exit={false}
+                    
+                    onEnter={(node) => {
+                        console.log('Enter')
+                    }}
+
+                    onExit={(node) => {
+                        console.log('Exited')
+                    }}
                 >
-                    { state => <p> {state} </p>}
+                    { state => 
+                        <div className={`square square-${state}`}>
+                            {`square square-${state}`}
+                        </div>
+                    }
                 </Transition>
                 <div className="showDiv" onClick={this.showDiv}>
                     Show or hide
