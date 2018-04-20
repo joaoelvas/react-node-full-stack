@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import FormFields from '../widgets/Forms/form_fields'
 
+import { firebaseDB } from '../firebase';
+
 class User extends Component {
 
     state = {
@@ -17,7 +19,7 @@ class User extends Component {
                 },
                 validation: {
                     required: true,
-                    minLen: 5
+                    minLen: 3
                 },
                 valid: false,
                 touched: false,
@@ -109,9 +111,18 @@ class User extends Component {
         }
 
         if(formIsValid) {
-            console.log(dataToSubmit)
+            console.log(dataToSubmit);
+
+            firebaseDB.ref('users').push(dataToSubmit)
+                .then(() => {
+                    console.log('New User Added')
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+
         } else {
-            console.log("Form is not valid!")
+            console.log("Form is not valid!");
         }
 
         

@@ -5,8 +5,11 @@ import Header from './components/Header/header';
 import Uncontrolled from './components/uncontrolled';
 import Controlled from './components/controlled';
 import User from './components/user';
+import Login from './components/login'
+import Dashboard from './components/dashboard';
+import PrivateRoute from './private_route';
 
-const Routes = () => {
+const Routes = (props) => {
     return (
         <div>
             <Header/>
@@ -14,6 +17,8 @@ const Routes = () => {
                 <Route path="/uncontrolled" exact component={Uncontrolled} />
                 <Route path="/controlled" exact component={Controlled} />
                 <Route path="/user" exact component={User} />
+                <Route path="/login" exact component={Login} />
+                <PrivateRoute isLogged={props.auth} path="/dashboard" exact component={Dashboard}/>
             </Switch>
         </div>
     )
