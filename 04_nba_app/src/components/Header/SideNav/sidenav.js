@@ -14,7 +14,7 @@ const SideNav = (props) => {
                     maxWidth:'220px'
                 }}
             >
-                <SideNavItems/>
+                <SideNavItems {...props}/>
             </RSSideNav>
         </div>
     )
