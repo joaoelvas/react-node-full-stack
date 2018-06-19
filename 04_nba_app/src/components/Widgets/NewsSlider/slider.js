@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { firebaseArticles, firebaseLooper } from '../../../firebase';
+import { firebaseArticles, firebaseLooper, firebaseImageStorage } from '../../../firebase';
 
 import SliderTemplates from './slider_templates';
 
@@ -14,9 +14,39 @@ class NewsSlider extends Component {
         firebaseArticles.limitToFirst(3).once('value').then(
             (snapshot) => {
                 const news = firebaseLooper(snapshot);
-                this.setState({
-                    news
+
+                // news.forEach((item, i) => {
+                //     console.log(item.image)
+                //     firebaseImageStorage.child(item.image).getDownloadURL().then( url => {
+                //         news[i].image = url;
+                //         this.setState({
+                //             news
+                //         })
+                //     })
+                // })
+
+                const asyncFunction = (item, i, cb) => {
+                    firebaseImageStorage.child(item.image).getDownloadURL().then(url => {
+                        news[i].image = url;
+                        cb();
+                    })
+                }
+
+                let requests = news.map((item, i) => {
+                    return new Promise((resolve) => {
+                        asyncFunction(item,i,resolve);
+                    })
                 })
+
+                Promise.all(requests).then(() => {
+                    this.setState({
+                        news
+                    })
+                })
+
+                // this.setState({
+                //     news
+                // })
             }
         )
 
