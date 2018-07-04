@@ -1,0 +1,20 @@
+<html>
+    <header>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            $.ajax({
+                type: "POST",
+                url: "/enteruser_post",
+                data: JSON.stringify({
+                    name: 'Francis',
+                    lastname: 'Jones'
+                }),
+                contentType: "application/json"
+            })
+        </script>
+
+    </header>
+    <body>
+
+    </body>
+</html>
