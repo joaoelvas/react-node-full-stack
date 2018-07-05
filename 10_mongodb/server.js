@@ -1,197 +1,103 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-const url = 'mongodb://localhost:27017/';
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/test');
 
-// MongoClient.connect(url, (err, db) => {
-//     if(err) {
-//         console.log('Could not connect')
-//     } else {
-//         console.log('connected')
-//     }
 
-//     db.close();
+const carSchema = mongoose.Schema({
+    brand: String,
+    model: String,
+    year: Number,
+    available: Boolean
+});
+const Car = mongoose.model('Car', carSchema);
+
+// const addCar = new Car({
+//     brand: 'Ford',
+//     model: 'Focus',
+//     year: 2017,
+//     available: true
 // })
 
-// MongoClient.connect(url, (err, client) => {
-//     if(err) {
-//         console.log('Could not connect')
-//     } else {
-//         var db = client.db('test');
-//         console.log('connected')
-//         db.collection('Cars').insertOne({
-//             model: 'Ford',
-//             year: 2017
-//         },(err, res) => {
-//             if(err) {
-//                 return console.log(`Cannot insert: ${err}`);
-//             }
-//             console.log(res.ops)
-//         })
-//     }
-//     client.close();
+// addCar.save((err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
-
-//     const cars = [
-//         {model: 'Chevy', year: '2017'},
-//         {model: 'Nissan', year: '2010'}
-//     ]
-
-
-//     if(err) {
-//         console.log('Could not connect')
-//     } else {
-//         var db = client.db('test');
-//         console.log('connected')
-//         db.collection('Cars').insert(cars,(err, res) => {
-//             if(err) {
-//                 return console.log(`Cannot insert: ${err}`);
-//             }
-//             console.log(res.ops)
-//         })
-//     }
-//     client.close();
+// Car.find((err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
-
-//     const cars = [
-//         {model: 'Chevy', year: '2017'},
-//         {model: 'Nissan', year: '2010'}
-//     ]
-
-
-//     if(err) {
-//         console.log('Could not connect')
-//     } else {
-//         var db = client.db('test');
-//         console.log('connected')
-//         db.collection('Cars').insertMany(cars,(err, res) => {
-//             if(err) {
-//                 return console.log(`Cannot insert: ${err}`);
-//             }
-//             console.log(res.ops)
-//         })
-//     }
-//     client.close();
+// Car.find({brand: 'Ford'},(err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     db.collection('Cars').find().toArray().then(data => {
-//         console.log(data)
-//     });
-
-//     client.close();
-
+// Car.find({_id: '5b3e8561b70391d2099cd33a'},(err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     db.collection('Cars').find()
-//     .skip(1)
-//     .limit(1)
-//     .sort({"_id":-1})
-//     .toArray().then(data => {
-//         console.log(data)
-//     });
-
-//     client.close();
-
+// Car.findById('5b3e8561b70391d2099cd33a',(err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     db.collection('Cars').find({year:'2010'})
-//     .toArray().then(data => {
-//         console.log(data)
-//     });
-
-//     client.close();
+// Car.findOne({brand: 'Ford'},(err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
 // })
 
-// MongoClient.connect(url, (err, client) => {
+// Car.findOneAndRemove({brand: 'Ford'}, (err, doc) => {
+//         if(err) return console.log(err);
+//         console.log(doc);
+// })
 
-//     var db = client.db('test');
+// Car.findByIdAndRemove('5b3e84e9b70391d2099cd305', (err, doc) => {
+//     if(err) return console.log(err);
+//     console.log(doc);
+// })
 
-//     var options = {
-//         fields: {
-//             model: 0, 
-//             year: 0
+// Car.update(
+//     {_id: '5b3e87dfb70391d2099cd3f8'}, 
+//     {
+//         $set: {
+//             brand: 'Nissan', 
+//             model: 'GTR'
 //         }
+//     }, 
+//     (err, doc) => {
+//         if(err) return console.log(err);
+//         console.log(doc);
 //     }
+// )
 
-//     db.collection('Cars').findOne({year:'2010'}, options, (err, doc) => {
-//         console.log(doc)
-//     });
+// Car.findByIdAndUpdate(
+//     '5b3e87dbb70391d2099cd3f5', 
+//     {
+//         $set: {
+//             brand: 'Nissan', 
+//             model: 'Leaf',
+//             year: 2018
+//         }
+//     },
+//     { new: false },
+//     (err, doc) => {
+//         if(err) return console.log(err);
+//         console.log(doc);
+//     }
+// )
 
-//     client.close();
-// })
+Car.findById('5b3e8ba8b70391d2099cd518', (err, car) => {
+    if(err) return console.log(err);
 
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     var id = db.collection('Cars').deleteMany({year:'2010'}, (err, doc) => {
-//         console.log(doc)
-//     });
-
-//     client.close();
-// })
-
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     var id = db.collection('Cars').deleteOne({model:'Chevy'}, (err, doc) => {
-//         console.log(doc)
-//     });
-
-//     client.close();
-// })
-
-// MongoClient.connect(url, (err, client) => {
-
-//     var db = client.db('test');
-
-//     var id = db.collection('Cars').findOneAndDelete({model:'Chevy'}, (err, doc) => {
-//         console.log(doc)
-//     });
-
-//     client.close();
-// })
-
-MongoClient.connect(url, (err, client) => {
-
-    var db = client.db('test');
-
-    var id = db.collection('Users').findOneAndUpdate(
-        {
-            name: 'Francis'
-        },
-        {
-            $set: {
-                lastname: 'Jones'
-            },
-            $inc: {
-                age: +2
-            }
-        },
-        {
-            upsert: true,
-            returnOriginal: true
-        },
-        (err,doc) => {
-            console.log(doc)
-        }
-    )
-
-    client.close();
+    car.set({
+        brand: 'Porsche',
+        model: '911'
+    });
+    car.save((err, doc) => {
+        if(err) return console.log(err);
+        console.log(doc);
+    });
 })
