@@ -18,7 +18,10 @@ app.post('/api/user', (req,res) => {
     });
 
     user.save((err,doc) => {
-        if(err) res.status(400).send(err);
+        if(err) {
+            console.log(err)
+            res.status(400).send(err);
+        }
         res.status(200).send(doc);
     })
 
