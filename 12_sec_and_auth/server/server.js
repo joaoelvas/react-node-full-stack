@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/auth', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/auth', { useNewUrlParser: true });
 
 const { User } = require('./models/user.js');
 const { auth } = require('./middleware/auth');
