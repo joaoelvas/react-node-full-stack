@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser')
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -9,6 +11,7 @@ mongoose.connect('mongodb://localhost:27017/auth', { useNewUrlParser: true });
 
 const { User } = require('./models/user.js');
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.post('/api/user', (req,res) => {
 
@@ -25,6 +28,39 @@ app.post('/api/user', (req,res) => {
         res.status(200).send(doc);
     })
 
+})
+
+app.post('/api/user/login', (req,res) => {
+
+    User.findOne({'email': req.body.email}, (err,user) => {
+        if(!user) return res.json({message: 'Auth failed, user not found'});
+        
+        user.comparePassword(req.body.password, (err, isMatch) => {
+            if(err) throw err;
+            if(!isMatch) return res.status(400).json({
+                message: 'Wrong password'
+            });
+
+            user.generateToken((err,user) => {
+                if(err) return res.status(400).send(err);
+                console.log(user.token)
+                res.cookie('auth', user.token).send('ok');
+            })
+
+        })
+    })
+
+})
+
+app.get('/api/user/profile',(req,res) => {
+    let token = req.cookies.auth;
+    
+    User.findByToken(token,(err,user) => {
+        if(err) throw err;
+        if(!user) res.status(401).send('No access');
+
+        res.status(200).send('Access');
+    })
 })
 
 const port = process.env.PORT || 8080;
