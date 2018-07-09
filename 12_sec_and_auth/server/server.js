@@ -10,6 +10,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/auth', { useNewUrlParser: true });
 
 const { User } = require('./models/user.js');
+const { auth } = require('./middleware/auth');
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -52,15 +53,8 @@ app.post('/api/user/login', (req,res) => {
 
 })
 
-app.get('/api/user/profile',(req,res) => {
-    let token = req.cookies.auth;
-    
-    User.findByToken(token,(err,user) => {
-        if(err) throw err;
-        if(!user) res.status(401).send('No access');
-
-        res.status(200).send('Access');
-    })
+app.get('/api/user/profile',auth,(req,res) => {
+    res.status(200).send(req.token);
 })
 
 const port = process.env.PORT || 8080;
